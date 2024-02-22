@@ -9,7 +9,11 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<User, UserDto>();
+        CreateMap<User, UserDto>()
+            .ForMember(x => x.Role, o => o.MapFrom(src => src.Role != null 
+                ? new RoleDto(src.Role.Id, src.Role.Name)
+                : null));
+
         CreateMap<CreateUserCommand, User>();
     }
 }

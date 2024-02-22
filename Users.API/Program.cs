@@ -12,11 +12,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<UsersContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -41,10 +42,10 @@ builder.Services.AddSwaggerGen(c =>
         {
             new OpenApiSecurityScheme
                 {
-                Reference = new OpenApiReference
+                    Reference = new OpenApiReference
                     {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
                     },
                     Scheme = "oauth2",
                     Name = "Bearer",

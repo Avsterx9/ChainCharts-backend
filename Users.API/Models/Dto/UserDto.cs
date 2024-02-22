@@ -6,5 +6,6 @@ public record UserDto(
     string LastName,
     string Email,
     DateTime DateOfBirth,
-    int RoleId
+    int RoleId,
+    RoleDto? Role
     );

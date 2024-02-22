@@ -2,7 +2,6 @@
 using Users.API.Commands.CreateUser;
 using Users.API.Models.Database;
 using Users.API.Models.Entities;
-using Users.API.Models.Responses;
 
 namespace Users.API.Repositories;
 
