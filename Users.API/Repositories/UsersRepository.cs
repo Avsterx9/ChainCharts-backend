@@ -22,8 +22,10 @@ public class UsersRepository : IUsersRepository
             .ToListAsync(ct);
     }
 
-    public Task<CreateUserResponse> CreateUserAsync(CreateUserCommand command, CancellationToken ct)
+    public async Task<User> AddUserAsync(User user, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
+        return user;
     }
 }

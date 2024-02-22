@@ -6,5 +6,5 @@ namespace Users.API.Repositories;
 public interface IUsersRepository
 {
     Task<List<User>> GetAllUsersAsync(CancellationToken ct);
-    Task<CreateUserResponse> CreateUserAsync(CreateUserCommand command, CancellationToken ct);
+    Task<User> AddUserAsync(User user, CancellationToken ct);
 }
