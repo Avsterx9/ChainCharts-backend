@@ -27,4 +27,11 @@ public class UsersRepository : IUsersRepository
         await _context.SaveChangesAsync();
         return user;
     }
+
+    public async Task<User?> GetUserByIdAsync(Guid Id, CancellationToken cancellationToken)
+    {
+        return await _context.Users
+            .Include(x => x.Role)
+            .FirstOrDefaultAsync(x => x.Id == Id);
+    }
 }

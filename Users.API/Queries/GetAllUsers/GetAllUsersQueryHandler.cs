@@ -3,7 +3,7 @@ using MediatR;
 using Users.API.Models.Dto;
 using Users.API.Repositories;
 
-namespace Users.API.Queries;
+namespace Users.API.Queries.GetAllUsers;
 
 public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserDto>>
 {
