@@ -16,9 +16,9 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
         _mapper = mapper;
     }
 
-    public Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = _usersRepository.GetUserByIdAsync(request.Id, cancellationToken);
+        var user = await _usersRepository.GetUserByIdAsync(request.Id, cancellationToken);
 
         if(user is null)
         {

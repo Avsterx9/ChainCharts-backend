@@ -1,3 +1,4 @@
+using Common.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -12,9 +13,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<UsersContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddLogging();
+
+builder.Services.AddTransient<ErrorHandlingMiddleware>();
+
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -68,6 +74,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
 

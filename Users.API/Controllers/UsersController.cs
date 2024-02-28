@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Users.API.Commands.CreateUser;
-using Users.API.Queries;
+using Users.API.Queries.GetAllUsers;
 
 namespace Users.API.Controllers;
 
