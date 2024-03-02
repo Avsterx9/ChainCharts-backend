@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using Users.API.Helpers;
 using Users.API.Models.Database;
 using Users.API.Models.Entities;
 using Users.API.Repositories;
@@ -23,13 +24,16 @@ builder.Services.AddTransient<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
+builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Authentication"));
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Gymapp API",
+        Title = "FitFrontier API",
         Version = "v1",
     });
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme

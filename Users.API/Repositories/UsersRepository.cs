@@ -28,10 +28,17 @@ public class UsersRepository : IUsersRepository
         return user;
     }
 
-    public async Task<User?> GetUserByIdAsync(Guid Id, CancellationToken cancellationToken)
+    public async Task<User?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _context.Users
             .Include(x => x.Role)
-            .FirstOrDefaultAsync(x => x.Id == Id);
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        return await _context.Users
+            .Include(x => x.Role)
+            .FirstOrDefaultAsync(x => x.Email == email);
     }
 }
