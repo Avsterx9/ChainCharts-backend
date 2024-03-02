@@ -1,8 +1,11 @@
 using Common.Middleware;
+using FluentAssertions.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 using Users.API.Helpers;
 using Users.API.Models.Database;
 using Users.API.Models.Entities;
@@ -24,8 +27,26 @@ builder.Services.AddTransient<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Authentication"));
+var authSettingsSection = builder.Configuration.GetSection("Authentication");
+builder.Services.Configure<AuthSettings>(authSettingsSection);
+var authSettings = authSettingsSection.Get<AuthSettings>();
 
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = "Bearer";
+    x.DefaultScheme = "Bearer";
+    x.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(config =>
+{
+    config.SaveToken = true;
+    config.RequireHttpsMetadata = false;
+    config.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = authSettings.JwtIssuer,
+        ValidAudience = authSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey))
+    };
+});
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -78,6 +99,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Users.API.Commands.CreateUser;
 using Users.API.Commands.Login;
@@ -22,6 +23,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> LoginAsync([FromQuery] LoginCommand command, CancellationToken ct) =>
         Ok(await _sender.Send(command, ct));
 
+    [Authorize]
     [HttpGet("GetAllUsers")]
     public async Task<IActionResult> GetAllUsersAsync(CancellationToken ct) =>
         Ok(await _sender.Send(new GetAllUsersQuery(), ct));
@@ -30,6 +32,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> CreateUserAsync([FromBody] CreateUserCommand command, CancellationToken ct) => 
         Ok(await _sender.Send(command, ct));
 
+    [Authorize]
     [HttpGet("GetUserById")]
     public async Task<IActionResult> GetUserByIdAsync([FromQuery] GetUserByIdQuery query, CancellationToken ct) =>
         Ok(await _sender.Send(query, ct));
