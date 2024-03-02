@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Common.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
-using System.Text.Json;
 
 namespace Common.Middleware;
 public class ErrorHandlingMiddleware : IMiddleware
@@ -20,24 +19,22 @@ public class ErrorHandlingMiddleware : IMiddleware
         {
             await next(context);
         }
+        catch (NotFoundException notFoundException)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            await context.Response.WriteAsync(notFoundException.Message);
+        }
+        catch (BadRequestException badRequestException)
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            await context.Response.WriteAsync(badRequestException.Message);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.Message);
 
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-            ProblemDetails problem = new ProblemDetails
-            {
-                Status = (int)HttpStatusCode.InternalServerError,
-                Title = "Server error",
-                Type = "Server error",
-                Detail = "An internal server error has occured",
-            };
-
-            var json = JsonSerializer.Serialize(problem);
-            await context.Response.WriteAsync(json);
-
-            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync("Something went wrong");
         }
     }
 }

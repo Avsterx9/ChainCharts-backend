@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Exceptions;
 using MediatR;
 using Users.API.Models.Dto;
 using Users.API.Repositories;
@@ -22,7 +23,7 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
 
         if(user is null)
         {
-            //throw Exception.
+            throw new NotFoundException(ExceptionCodes.USER_NOT_FOUND);
         }
 
         return _mapper.Map<UserDto>(user);

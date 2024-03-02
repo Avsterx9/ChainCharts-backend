@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Users.API.Commands.CreateUser;
 using Users.API.Queries.GetAllUsers;
+using Users.API.Queries.GetUserById;
 
 namespace Users.API.Controllers;
 
@@ -23,4 +24,8 @@ public class UsersController : ControllerBase
     [HttpPost("CreateUser")]
     public async Task<IActionResult> AddUser([FromBody] CreateUserCommand command, CancellationToken ct) => 
         Ok(await _sender.Send(command, ct));
+
+    [HttpGet("GetUserById")]
+    public async Task<IActionResult> GetUserById([FromQuery] GetUserByIdQuery query, CancellationToken ct) =>
+        Ok(await _sender.Send(query, ct));
 }
