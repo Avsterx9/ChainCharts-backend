@@ -20,7 +20,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("Login")]
-    public async Task<IActionResult> LoginAsync([FromQuery] LoginCommand command, CancellationToken ct) =>
+    public async Task<IActionResult> LoginAsync([FromBody] LoginCommand command, CancellationToken ct) =>
         Ok(await _sender.Send(command, ct));
 
     [Authorize]
