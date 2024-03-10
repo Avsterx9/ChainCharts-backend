@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  users.api:
+    image: ${DOCKER_REGISTRY-}usersapi
+    build:
+      context: .
+      dockerfile: Users.API/Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - fitfrontier
+
+networks:
+  fitfrontier:
+    external: true
