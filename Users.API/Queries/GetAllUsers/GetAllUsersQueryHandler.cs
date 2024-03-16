@@ -2,24 +2,21 @@
 using MediatR;
 using Users.API.Models.Dto;
 using Users.API.Repositories;
+using Users.API.Services;
 
 namespace Users.API.Queries.GetAllUsers;
 
 public sealed class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<UserDto>>
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
 
-    public GetAllUsersQueryHandler(IUsersRepository usersRepository, IMapper mapper)
+    public GetAllUsersQueryHandler(IUserService userService)
     {
-        _usersRepository = usersRepository;
-        _mapper = mapper;
+        _userService = userService;
     }
 
     public async Task<IEnumerable<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
-        var users = await _usersRepository.GetAllUsersAsync(cancellationToken);
-
-        return users.Select(x => _mapper.Map<UserDto>(x)).ToList();
+        return await _userService.GetAllUsersAsync(cancellationToken);
     }
 }

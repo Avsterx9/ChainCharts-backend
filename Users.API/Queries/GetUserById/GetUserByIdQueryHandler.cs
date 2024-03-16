@@ -1,31 +1,20 @@
-﻿using AutoMapper;
-using Common.Exceptions;
-using MediatR;
+﻿using MediatR;
 using Users.API.Models.Dto;
-using Users.API.Repositories;
+using Users.API.Services;
 
 namespace Users.API.Queries.GetUserById;
 
 public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserDto>
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly IMapper _mapper;
+    private readonly IUserService _usersService;
 
-    public GetUserByIdQueryHandler(IUsersRepository usersRepository, IMapper mapper)
+    public GetUserByIdQueryHandler(IUserService usersService)
     {
-        _usersRepository = usersRepository;
-        _mapper = mapper;
+        _usersService = usersService;
     }
 
     public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetUserByIdAsync(request.Id, cancellationToken);
-
-        if(user is null)
-        {
-            throw new NotFoundException(ExceptionCodes.USER_NOT_FOUND);
-        }
-
-        return _mapper.Map<UserDto>(user);
+        return await _usersService.GetUserByIdAsync(request.Id);
     }
 }

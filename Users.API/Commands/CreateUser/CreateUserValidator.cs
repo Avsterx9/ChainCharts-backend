@@ -6,10 +6,10 @@ public class CreateUserValidator : AbstractValidator<CreateUserCommand>
 {
     public CreateUserValidator()
     {
-        RuleFor(x => x.Email).EmailAddress();
-        RuleFor(x => x.FirstName).NotEmpty();
-        RuleFor(x => x.LastName).NotEmpty();
-        RuleFor(x => x.Password).NotEmpty();
-        RuleFor(x => x.RoleId).NotNull().NotEqual(0);
+        RuleFor(x => x.RegistrationDto.Email).EmailAddress();
+        RuleFor(x => x.RegistrationDto.FirstName).NotEmpty();
+        RuleFor(x => x.RegistrationDto.LastName).NotEmpty();
+        RuleFor(x => x.RegistrationDto.Password).NotEmpty();
+        RuleFor(x => x.RegistrationDto.RoleId).NotNull().NotEqual(0);
     }
 }

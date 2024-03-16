@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Users.API.Commands.CreateUser;
 using Users.API.Models.Dto;
+using Users.API.Models.Dto.Auth;
 using Users.API.Models.Entities;
 
 namespace Users.API.Helpers;
@@ -14,7 +14,7 @@ public class AutoMapperProfile : Profile
                 ? new RoleDto(src.RoleId, src.Role.Name)
                 : null));
 
-        CreateMap<CreateUserCommand, User>();
+        CreateMap<UserRegistrationDto, User>();
         CreateMap<Role, RoleDto>();
     }
 }

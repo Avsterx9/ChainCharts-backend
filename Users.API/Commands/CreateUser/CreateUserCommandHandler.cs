@@ -1,40 +1,25 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Users.API.Models.Entities;
+﻿using MediatR;
 using Users.API.Models.Responses;
-using Users.API.Repositories;
+using Users.API.Services;
 
 namespace Users.API.Commands.CreateUser;
 
 public sealed class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CreateUserResponse>
 {
-    private readonly IUsersRepository _usersRepository;
-    private readonly IMapper _mapper;
-    private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IUserService _userService;
 
-    public CreateUserCommandHandler(
-        IUsersRepository usersRepository,
-        IMapper mapper,
-        IPasswordHasher<User> passwordHasher)
+    public CreateUserCommandHandler(IUserService userService)
     {
-        _usersRepository = usersRepository;
-        _mapper = mapper;
-        _passwordHasher = passwordHasher;
+        _userService = userService;
     }
 
     public async Task<CreateUserResponse> Handle(CreateUserCommand command, CancellationToken cancellationToken)
     {
-        var user = _mapper.Map<User>(command);
-
-        var hashedPassword = _passwordHasher.HashPassword(user, command.Password);
-        user.PasswordHash = hashedPassword;
-
-        var addedUser = await _usersRepository.AddUserAsync(user, cancellationToken);
+        var createdUser = await _userService.CreateUserAsync(command.RegistrationDto, cancellationToken);
 
         return new CreateUserResponse
         {
-            Id = addedUser.Id,
+            Id = createdUser.Id,
             Message = "User added successfully",
             Success = true
         };
