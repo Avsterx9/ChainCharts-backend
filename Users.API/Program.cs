@@ -1,5 +1,6 @@
 using Common.Middleware;
 using Common.PolicyExtensions;
+using Common.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ using Users.API.Helpers;
 using Users.API.Models.Database;
 using Users.API.Models.Entities;
 using Users.API.Repositories;
+using Users.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,10 +34,13 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddLogging();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var authSettingsSection = builder.Configuration.GetSection("Authentication");

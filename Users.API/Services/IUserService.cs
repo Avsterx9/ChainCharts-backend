@@ -8,4 +8,5 @@ public interface IUserService
     Task<IEnumerable<UserDto>> GetAllUsersAsync(CancellationToken CancellationToken);
     Task<UserDto> CreateUserAsync(UserRegistrationDto RegistrationDto, CancellationToken CancellationToken);
     Task<UserDto> GetUserByIdAsync(Guid Id, CancellationToken CancellationToken);
+    Task<UserDto> GetCurrentUserAsync(CancellationToken cancellationToken);
 }

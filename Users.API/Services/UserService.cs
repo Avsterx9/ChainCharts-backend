@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.Exceptions;
+using Common.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -20,17 +21,20 @@ public class UserService : IUserService
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly AuthSettings _authSettings;
     private readonly IMapper _mapper;
+    private readonly IUserContextService _userContextService;
 
     public UserService(
         IUsersRepository usersRepository,
         IPasswordHasher<User> passwordHasher,
         IOptions<AuthSettings> authSettings,
-        IMapper mapper)
+        IMapper mapper,
+        IUserContextService userContextService)
     {
         _usersRepository = usersRepository;
         _passwordHasher = passwordHasher;
         _authSettings = authSettings.Value;
         _mapper = mapper;
+        _userContextService = userContextService;
     }
 
     public async Task<string> GenerateJwtTokenAsync(UserCredentialsDto UserCredentials, CancellationToken ct)
@@ -96,6 +100,15 @@ public class UserService : IUserService
         {
             throw new NotFoundException(ExceptionCodes.USER_NOT_FOUND);
         }
+
+        return _mapper.Map<UserDto>(user);
+    }
+
+    public async Task<UserDto> GetCurrentUserAsync(CancellationToken cancellationToken)
+    {
+        var userId = _userContextService.GetUserId();
+
+        var user = await _usersRepository.GetUserByIdAsync(userId, cancellationToken);
 
         return _mapper.Map<UserDto>(user);
     }

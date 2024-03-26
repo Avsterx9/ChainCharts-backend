@@ -5,6 +5,7 @@ using Users.API.Commands.CreateUser;
 using Users.API.Commands.Login;
 using Users.API.Models.Dto.Auth;
 using Users.API.Queries.GetAllUsers;
+using Users.API.Queries.GetCurrentUser;
 using Users.API.Queries.GetUserById;
 
 namespace Users.API.Controllers;
@@ -37,4 +38,9 @@ public class UsersController : ControllerBase
     [HttpGet("GetUserById")]
     public async Task<IActionResult> GetUserByIdAsync([FromQuery] Guid Id, CancellationToken ct) =>
         Ok(await _sender.Send(new GetUserByIdQuery(Id), ct));
+
+    [Authorize]
+    [HttpGet("GetCurrentUser")]
+    public async Task<IActionResult> GetCurrentUser(CancellationToken ct) =>
+        Ok(await _sender.Send(new GetCurrentUserQuery(), ct));
 }
