@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Users.API.Models.Dto;
-using Users.API.Queries.GetUserById;
 using Users.API.Services;
 
 namespace Users.API.Queries.GetCurrentUser;
