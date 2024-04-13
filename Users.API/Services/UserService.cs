@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Authorization;
 using Common.Exceptions;
 using Common.Services;
 using Microsoft.AspNetCore.Identity;

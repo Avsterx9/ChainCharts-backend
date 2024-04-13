@@ -1,5 +1,4 @@
-﻿namespace Users.API.Helpers;
-
+﻿namespace Common.Authorization;
 public record AuthSettings
 {
     public string JwtKey { get; set; }

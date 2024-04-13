@@ -1,9 +1,15 @@
+using Common.Authorization;
 using Common.Middleware;
 using Common.PolicyExtensions;
+using Common.Services;
 using Crypto.API.Models.Entities.Database;
+using Crypto.API.Repositories;
+using Crypto.API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +24,8 @@ builder.Services.AddCors(options =>
                       });
 });
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<CryptoContext>(options => options.UseSqlServer(connectionString));
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<CryptoContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 
@@ -30,11 +36,33 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
-//builder.Services.AddScoped<IUsersRepository, UsersRepository>();
-//builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddScoped<ICoinGeckoRepository, CoinGeckoRepository>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddEndpointsApiExplorer();
+
+var authSettingsSection = builder.Configuration.GetSection("Authentication");
+builder.Services.Configure<AuthSettings>(authSettingsSection);
+var authSettings = authSettingsSection.Get<AuthSettings>();
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = "Bearer";
+    x.DefaultScheme = "Bearer";
+    x.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(config =>
+{
+    config.SaveToken = true;
+    config.RequireHttpsMetadata = false;
+    config.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = authSettings.JwtIssuer,
+        ValidAudience = authSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey))
+    };
+});
 
 builder.Services.AddSwaggerGen(c =>
 {

@@ -1,3 +1,4 @@
+using Common.Authorization;
 using Common.Middleware;
 using Common.PolicyExtensions;
 using Common.Services;
