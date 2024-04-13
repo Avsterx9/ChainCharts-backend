@@ -4,12 +4,12 @@ using System.Net.Http.Headers;
 
 namespace Crypto.API.Repositories;
 
-public class CoinGeckoRepository : ICoinGeckoRepository
+public class CoinGeckoManager : ICoinGeckoManager
 {
     private readonly string _coinGeckoURL = "https://api.coingecko.com/api/v3";
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public CoinGeckoRepository(IHttpClientFactory httpClientFactory)
+    public CoinGeckoManager(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }

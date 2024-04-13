@@ -1,7 +1,7 @@
 ﻿using Crypto.API.Models.Dto;
 
 namespace Crypto.API.Repositories;
-public interface ICoinGeckoRepository
+public interface ICoinGeckoManager
 {
     Task<IEnumerable<CryptoTokenDto>> GetCoinGeckoTokensAsync();
 }

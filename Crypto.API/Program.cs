@@ -37,11 +37,13 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
 builder.Services.AddScoped<ICryptoService, CryptoService>();
-builder.Services.AddScoped<ICoinGeckoRepository, CoinGeckoRepository>();
+builder.Services.AddScoped<ICoinGeckoManager, CoinGeckoManager>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddHttpClient();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDistributedMemoryCache();
 
 var authSettingsSection = builder.Configuration.GetSection("Authentication");
 builder.Services.Configure<AuthSettings>(authSettingsSection);
