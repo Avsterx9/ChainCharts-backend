@@ -8,6 +8,40 @@ services:
       dockerfile: Users.API/Dockerfile
     ports:
       - "5001:5001"
+      - "5101:5101" 
+    networks:
+      - fitfrontier
+
+  crypto.api:
+    image: ${DOCKER_REGISTRY-}cryptoapi
+    build:
+      context: .
+      dockerfile: Crypto.API/Dockerfile
+    ports:
+      - "5002:5002"
+      - "5102:5102" 
+    networks:
+      - fitfrontier
+
+  users.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    hostname: users.database
+    environment: 
+      SA_PASSWORD: "zaq1@WSX"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - fitfrontier
+
+  crypto.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    hostname: crypto.database
+    environment: 
+      SA_PASSWORD: "zaq1@WSX"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1434:1433"
     networks:
       - fitfrontier
 

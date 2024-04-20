@@ -2,24 +2,15 @@
 using Common.Services;
 using Crypto.API.Models.Dto;
 using Crypto.API.Queries.GetCGTokens;
-using Crypto.API.Repositories;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace Crypto.API.Services;
 
 public class CryptoService : ICryptoService
 {
-    private readonly IMapper _mapper;
-    private readonly IUserContextService _userContextService;
     private readonly ICacheService _cacheService;
 
-    public CryptoService(
-        IMapper mapper,
-        IUserContextService userContextService,
-        ICacheService cacheService)
+    public CryptoService(ICacheService cacheService)
     {
-        _mapper = mapper;
-        _userContextService = userContextService;
         _cacheService = cacheService;
     }
 
