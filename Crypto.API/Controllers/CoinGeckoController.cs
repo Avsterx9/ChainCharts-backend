@@ -1,4 +1,5 @@
 ﻿using Crypto.API.Queries.GetCGTokens;
+using Crypto.API.Queries.GetPriceData;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,4 +21,9 @@ public class CoinGeckoController : ControllerBase
     [HttpGet("GetTokens")]
     public async Task<IActionResult> GetTokens(CancellationToken ct) =>
         Ok(await _sender.Send(new GetCGTokensQuery(), ct));
+
+
+    [HttpGet("GetPriceData")]
+    public async Task<IActionResult> GetTokens([FromQuery] string TokenName,[FromQuery] int Days, CancellationToken ct) =>
+        Ok(await _sender.Send(new GetPriceDataQuery(TokenName, Days), ct));
 }

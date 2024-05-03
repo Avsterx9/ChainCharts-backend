@@ -2,6 +2,7 @@
 using Crypto.API.Repositories;
 using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Crypto.API.Services;
 
@@ -40,4 +41,26 @@ public class CacheService : ICacheService
         return tokens;
     }
 
+    public async Task<PriceDataDto> GetPriceDataAsync(string tokenName, int days)
+    {
+        string cacheKey = $"priceData_{tokenName}_{days}";
+
+        PriceDataDto data;
+
+        string serializedData = await _distributedCache.GetStringAsync(cacheKey);
+
+        if (serializedData != null)
+        {
+            return JsonConvert.DeserializeObject<PriceDataDto>(serializedData);
+        }
+
+        data = await _coingGeckoManager.GetPriceDataAsync(tokenName, days);
+        serializedData = JsonConvert.SerializeObject(data);
+
+        var options = new DistributedCacheEntryOptions()
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+
+        await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
+        return data;
+    }
 }

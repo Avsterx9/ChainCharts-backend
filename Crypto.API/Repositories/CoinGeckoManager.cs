@@ -17,6 +17,8 @@ public class CoinGeckoManager : ICoinGeckoManager
     public async Task<IEnumerable<CryptoTokenDto>> GetCoinGeckoTokensAsync() =>
         await SendRequestAndGetResponseAsync<IEnumerable<CryptoTokenDto>>($"{_coinGeckoURL}/coins/markets?vs_currency=usd&order=market_cap_desc", HttpMethod.Get);
 
+    public async Task<PriceDataDto> GetPriceDataAsync(string TokenName, int Days) =>
+        await SendRequestAndGetResponseAsync<PriceDataDto>($"{_coinGeckoURL}/coins/{TokenName}/market_chart?vs_currency=usd&days={Days}", HttpMethod.Get);
 
     private async Task<T> SendRequestAndGetResponseAsync<T>(string url, HttpMethod method, object? content = null, string? token = null)
     {

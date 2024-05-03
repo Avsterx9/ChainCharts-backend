@@ -4,4 +4,5 @@ namespace Crypto.API.Repositories;
 public interface ICoinGeckoManager
 {
     Task<IEnumerable<CryptoTokenDto>> GetCoinGeckoTokensAsync();
+    Task<PriceDataDto> GetPriceDataAsync(string TokenName, int Days);
 }
