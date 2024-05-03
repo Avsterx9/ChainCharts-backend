@@ -15,13 +15,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+int port = 5002;
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenLocalhost(port);
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.GetPolicyForCors(5002);
-                      });
+        policy =>
+        {
+            policy.GetPolicyForCors(port);
+        });
 });
 
 //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

@@ -11,6 +11,9 @@ services:
       - "5101:5101" 
     networks:
       - fitfrontier
+    container_name: users.api
+    depends_on:
+      - "users.database"
 
   crypto.api:
     image: ${DOCKER_REGISTRY-}cryptoapi
@@ -26,11 +29,15 @@ services:
   users.database:
     image: mcr.microsoft.com/mssql/server:2022-latest
     hostname: users.database
+    container_name: users.database
     environment: 
-      SA_PASSWORD: "zaq1@WSX"
-      ACCEPT_EULA: "Y"
+      - SA_PASSWORD:zaq1@WSX
+      - ACCEPT_EULA:Y
+      - MSSQL_PID=Developer
     ports:
       - "1433:1433"
+    volumes:
+      - users-db:/var/opt/mssql
     networks:
       - fitfrontier
 
@@ -38,8 +45,8 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     hostname: crypto.database
     environment: 
-      SA_PASSWORD: "zaq1@WSX"
-      ACCEPT_EULA: "Y"
+      - SA_PASSWORD:zaq1@WSX
+      - ACCEPT_EULA:Y
     ports:
       - "1434:1433"
     networks:
@@ -48,3 +55,6 @@ services:
 networks:
   fitfrontier:
     external: true
+
+volumes:
+  users-db:
