@@ -63,4 +63,27 @@ public class CacheService : ICacheService
         await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
         return data;
     }
+
+    public async Task<TokenDescriptionDto> GetTokenDescriptionAsync(string tokenName)
+    {
+        string cacheKey = $"tokenDescription_{tokenName}";
+
+        TokenDescriptionDto data;
+
+        string serializedData = await _distributedCache.GetStringAsync(cacheKey);
+
+        if (serializedData != null)
+        {
+            return JsonConvert.DeserializeObject<TokenDescriptionDto>(serializedData);
+        }
+
+        data = await _coingGeckoManager.GetTokenDescriptionAsync(tokenName);
+        serializedData = JsonConvert.SerializeObject(data);
+
+        var options = new DistributedCacheEntryOptions()
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+
+        await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
+        return data;
+    }
 }

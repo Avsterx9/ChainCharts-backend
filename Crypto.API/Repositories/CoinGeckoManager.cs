@@ -20,6 +20,10 @@ public class CoinGeckoManager : ICoinGeckoManager
     public async Task<PriceDataDto> GetPriceDataAsync(string TokenName, int Days) =>
         await SendRequestAndGetResponseAsync<PriceDataDto>($"{_coinGeckoURL}/coins/{TokenName}/market_chart?vs_currency=usd&days={Days}", HttpMethod.Get);
 
+    public async Task<TokenDescriptionDto> GetTokenDescriptionAsync(string TokenName) =>
+        await SendRequestAndGetResponseAsync<TokenDescriptionDto>($"{_coinGeckoURL}/coins/{TokenName}", HttpMethod.Get);
+
+
     private async Task<T> SendRequestAndGetResponseAsync<T>(string url, HttpMethod method, object? content = null, string? token = null)
     {
         var httpRequestMessage = new HttpRequestMessage(method, url);

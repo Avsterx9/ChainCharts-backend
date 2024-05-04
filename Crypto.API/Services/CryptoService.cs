@@ -25,4 +25,11 @@ public class CryptoService : ICryptoService
 
         return data;
     }
+
+    public async Task<TokenDescriptionDto> GetTokenDescriptionAsync(string tokenName, CancellationToken cancellationToken)
+    {
+        var tokenDesc = await _cacheService.GetTokenDescriptionAsync(tokenName);
+
+        return tokenDesc;
+    }
 }
