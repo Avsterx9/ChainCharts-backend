@@ -1,9 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-using System;
-using Crypto.API.Models.Dto;
-using Newtonsoft.Json;
-
-namespace Crypto.API.Models.Dto;
+﻿namespace Crypto.API.Models.Dto;
 
 public record TokenDescriptionDto
 {
@@ -18,7 +13,6 @@ public record TokenDescriptionDto
     public bool preview_listing { get; set; }
     public object public_notice { get; set; }
     public List<object> additional_notices { get; set; }
-    public DescriptionContainer localization { get; set; }
     public DescriptionContainer description { get; set; }
     public Links links { get; set; }
     public Image image { get; set; }
@@ -33,7 +27,6 @@ public record TokenDescriptionDto
     public DeveloperData developer_data { get; set; }
     public List<object> status_updates { get; set; }
     public DateTime last_updated { get; set; }
-    public List<Ticker> tickers { get; set; }
 }
 
 public class PriceContainer
@@ -70,12 +63,6 @@ public class DescriptionContainer
     public string pl { get; set; }
 }
 
-public class CodeAdditionsDeletions4Weeks
-{
-    public int additions { get; set; }
-    public int deletions { get; set; }
-}
-
 public class CommunityData
 {
     public object facebook_likes { get; set; }
@@ -110,9 +97,7 @@ public class DeveloperData
     public int closed_issues { get; set; }
     public int pull_requests_merged { get; set; }
     public int pull_request_contributors { get; set; }
-    public CodeAdditionsDeletions4Weeks code_additions_deletions_4_weeks { get; set; }
     public int commit_count_4_weeks { get; set; }
-    public List<object> last_4_weeks_commit_activity_series { get; set; }
 }
 
 public class Image
@@ -130,9 +115,6 @@ public class Links
     public List<string> official_forum_url { get; set; }
     public List<string> chat_url { get; set; }
     public List<string> announcement_url { get; set; }
-    public string twitter_screen_name { get; set; }
-    public string facebook_username { get; set; }
-    public object bitcointalk_thread_identifier { get; set; }
     public string telegram_channel_identifier { get; set; }
     public string subreddit_url { get; set; }
     public ReposUrl repos_url { get; set; }
@@ -165,7 +147,7 @@ public class MarketData
     public PriceContainer total_volume { get; set; }
     public PriceContainer high_24h { get; set; }
     public PriceContainer low_24h { get; set; }
-    public int price_change_24h { get; set; }
+    public double price_change_24h { get; set; }
     public double price_change_percentage_24h { get; set; }
     public double price_change_percentage_7d { get; set; }
     public double price_change_percentage_14d { get; set; }
@@ -173,7 +155,7 @@ public class MarketData
     public double price_change_percentage_60d { get; set; }
     public double price_change_percentage_200d { get; set; }
     public double price_change_percentage_1y { get; set; }
-    public long market_cap_change_24h { get; set; }
+    public double market_cap_change_24h { get; set; }
     public double market_cap_change_percentage_24h { get; set; }
     public PriceContainer price_change_24h_in_currency { get; set; }
     public PriceContainer price_change_percentage_1h_in_currency { get; set; }
@@ -187,7 +169,7 @@ public class MarketData
     public PriceContainer market_cap_change_24h_in_currency { get; set; }
     public PriceContainer market_cap_change_percentage_24h_in_currency { get; set; }
     public double total_supply { get; set; }
-    public double max_supply { get; set; }
+    public double? max_supply { get; set; }
     public double circulating_supply { get; set; }
     public DateTime last_updated { get; set; }
 }
@@ -195,28 +177,6 @@ public class MarketData
 public class ReposUrl
 {
     public List<string> github { get; set; }
-    public List<object> bitbucket { get; set; }
-}
-
-public class Ticker
-{
-    public string @base { get; set; }
-    public string target { get; set; }
-    public Market market { get; set; }
-    public double last { get; set; }
-    public double volume { get; set; }
-    public ConvertedLast converted_last { get; set; }
-    public ConvertedVolume converted_volume { get; set; }
-    public string trust_score { get; set; }
-    public double bid_ask_spread_percentage { get; set; }
-    public DateTime timestamp { get; set; }
-    public DateTime last_traded_at { get; set; }
-    public DateTime last_fetch_at { get; set; }
-    public bool is_anomaly { get; set; }
-    public bool is_stale { get; set; }
-    public string trade_url { get; set; }
-    public object token_info_url { get; set; }
-    public string coin_id { get; set; }
-    public string target_coin_id { get; set; }
+    public List<string> bitbucket { get; set; }
 }
 

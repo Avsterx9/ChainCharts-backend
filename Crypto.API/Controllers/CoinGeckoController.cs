@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Crypto.API.Controllers;
 
-[Route("api/users")]
+[Route("api/crypto")]
 [ApiController]
 [Authorize]
 public class CoinGeckoController : ControllerBase
