@@ -6,4 +6,5 @@ public interface ICoinGeckoManager
     Task<IEnumerable<CryptoTokenDto>> GetCoinGeckoTokensAsync();
     Task<PriceDataDto> GetPriceDataAsync(string TokenName, int Days);
     Task<TokenDescriptionDto> GetTokenDescriptionAsync(string TokenName);
+    Task<GlobalDataDto> GetGlobalDataAsync();
 }

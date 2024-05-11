@@ -32,4 +32,11 @@ public class CryptoService : ICryptoService
 
         return tokenDesc;
     }
+
+    public async Task<GlobalDataDto> GetGlobalDataAsync(CancellationToken cancellationToken)
+    {
+        var data = await _cacheService.GetGlobalDataAsync();
+
+        return data;
+    }
 }

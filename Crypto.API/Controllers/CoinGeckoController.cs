@@ -1,4 +1,5 @@
 ﻿using Crypto.API.Queries.GetCGTokens;
+using Crypto.API.Queries.GetGlobalData;
 using Crypto.API.Queries.GetPriceData;
 using Crypto.API.Queries.GetTokenDescription;
 using MediatR;
@@ -31,4 +32,9 @@ public class CoinGeckoController : ControllerBase
     [HttpGet("GetTokenDescription")]
     public async Task<IActionResult> GetTokenDescription([FromQuery] string TokenName, CancellationToken ct) =>
         Ok(await _sender.Send(new GetTokenDescriptionQuery(TokenName), ct));
+
+    [HttpGet("GetGlobalData")]
+    public async Task<IActionResult> GetGlobalData(CancellationToken ct) =>
+        Ok(await _sender.Send(new GetGlobalDataQuery(), ct));
+
 }

@@ -23,6 +23,9 @@ public class CoinGeckoManager : ICoinGeckoManager
     public async Task<TokenDescriptionDto> GetTokenDescriptionAsync(string TokenName) =>
         await SendRequestAndGetResponseAsync<TokenDescriptionDto>($"{_coinGeckoURL}/coins/{TokenName}", HttpMethod.Get);
 
+    public async Task<GlobalDataDto> GetGlobalDataAsync() =>
+        await SendRequestAndGetResponseAsync<GlobalDataDto>($"{_coinGeckoURL}/global", HttpMethod.Get);
+
 
     private async Task<T> SendRequestAndGetResponseAsync<T>(string url, HttpMethod method, object? content = null, string? token = null)
     {

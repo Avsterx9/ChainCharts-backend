@@ -39,6 +39,7 @@ public class PriceContainer
     public double jpy { get; set; }
     public double pln { get; set; }
     public double xrp { get; set; }
+    public double usd { get; set; }
 }
 
 public class DateContainer
@@ -51,6 +52,7 @@ public class DateContainer
     public DateTime jpy { get; set; }
     public DateTime pln { get; set; }
     public DateTime xrp { get; set; }
+    public DateTime usd { get; set; }
 }
 
 public class DescriptionContainer

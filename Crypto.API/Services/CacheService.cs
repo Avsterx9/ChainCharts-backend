@@ -35,7 +35,7 @@ public class CacheService : ICacheService
         serializedTokens = JsonConvert.SerializeObject(tokens);
 
         var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
 
         await _distributedCache.SetStringAsync(cacheKey, serializedTokens, options);
         return tokens;
@@ -58,7 +58,7 @@ public class CacheService : ICacheService
         serializedData = JsonConvert.SerializeObject(data);
 
         var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(3));
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
 
         await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
         return data;
@@ -81,9 +81,33 @@ public class CacheService : ICacheService
         serializedData = JsonConvert.SerializeObject(data);
 
         var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
 
         await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
         return data;
     }
+
+    public async Task<GlobalDataDto> GetGlobalDataAsync()
+    {
+        string cacheKey = $"global";
+
+        GlobalDataDto data;
+
+        string serializedData = await _distributedCache.GetStringAsync(cacheKey);
+
+        if (serializedData != null)
+        {
+            return JsonConvert.DeserializeObject<GlobalDataDto>(serializedData);
+        }
+
+        data = await _coingGeckoManager.GetGlobalDataAsync();
+        serializedData = JsonConvert.SerializeObject(data);
+
+        var options = new DistributedCacheEntryOptions()
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+
+        await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
+        return data;
+    }
+
 }
