@@ -6,12 +6,11 @@ services:
     build:
       context: .
       dockerfile: Users.API/Dockerfile
-    ports:
-      - "5001:5001"
-      - "5101:5101" 
     networks:
       - fitfrontier
     container_name: users.api
+    ports:
+        - "5001:80"
     depends_on:
       - "users.database"
 
@@ -21,8 +20,7 @@ services:
       context: .
       dockerfile: Crypto.API/Dockerfile
     ports:
-      - "5002:5002"
-      - "5102:5102" 
+        - "5002:80"
     networks:
       - fitfrontier
 
@@ -34,10 +32,10 @@ services:
       - SA_PASSWORD:zaq1@WSX
       - ACCEPT_EULA:Y
       - MSSQL_PID=Developer
-    ports:
-      - "1433:1433"
     volumes:
       - users-db:/var/opt/mssql
+    ports:
+        - "6000:1433"
     networks:
       - fitfrontier
 

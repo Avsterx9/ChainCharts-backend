@@ -15,10 +15,10 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 int port = 5002;
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenLocalhost(port);
-});
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.ListenLocalhost(port);
+//});
 
 builder.Services.AddCors(options =>
 {
@@ -114,7 +114,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

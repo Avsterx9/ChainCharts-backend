@@ -2,8 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 5001
-EXPOSE 5101
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
@@ -12,10 +12,10 @@ COPY ["Common/Common.csproj", "Common/"]
 RUN dotnet restore "Users.API/Users.API.csproj"
 COPY . .
 WORKDIR "/src/Users.API"
-RUN dotnet build "Users.API.csproj" -c Release -o /app/build
+RUN dotnet build "Users.API.csproj" -c Development -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Users.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Users.API.csproj" -c Development -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
