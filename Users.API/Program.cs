@@ -20,11 +20,6 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 int port = 5001;
 
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    serverOptions.ListenLocalhost(port);
-//});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(MyAllowSpecificOrigins,

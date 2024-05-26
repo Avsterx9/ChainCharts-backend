@@ -13,6 +13,7 @@ public static class PolicyExtensions
             .SetPreflightMaxAge(TimeSpan.FromSeconds(3600))
             .WithOrigins(
                 "http://localhost:4200",
+                "http://localhost:5000",
                 $"http://localhost:{portNumber}"
             );
     }
