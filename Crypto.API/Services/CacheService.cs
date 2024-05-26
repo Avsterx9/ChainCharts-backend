@@ -22,92 +22,58 @@ public class CacheService : ICacheService
     public async Task<IEnumerable<CryptoTokenDto>> GetCGTokensAsync()
     {
         string cacheKey = "coinGeckoTokens";
-        IEnumerable<CryptoTokenDto> tokens;
 
-        string serializedTokens = await _distributedCache.GetStringAsync(cacheKey);
-
-        if (serializedTokens != null)
-        {
-            return JsonConvert.DeserializeObject<IEnumerable<CryptoTokenDto>>(serializedTokens);
-        }
-
-        tokens = await _coingGeckoManager.GetCoinGeckoTokensAsync();
-        serializedTokens = JsonConvert.SerializeObject(tokens);
-
-        var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-
-        await _distributedCache.SetStringAsync(cacheKey, serializedTokens, options);
-        return tokens;
+        return await GetCachedData<IEnumerable<CryptoTokenDto>>(
+            cacheKey,
+            () => _coingGeckoManager.GetCoinGeckoTokensAsync(),
+            TimeSpan.FromMinutes(10));
     }
 
     public async Task<PriceDataDto> GetPriceDataAsync(string tokenName, int days)
     {
         string cacheKey = $"priceData_{tokenName}_{days}";
 
-        PriceDataDto data;
-
-        string serializedData = await _distributedCache.GetStringAsync(cacheKey);
-
-        if (serializedData != null)
-        {
-            return JsonConvert.DeserializeObject<PriceDataDto>(serializedData);
-        }
-
-        data = await _coingGeckoManager.GetPriceDataAsync(tokenName, days);
-        serializedData = JsonConvert.SerializeObject(data);
-
-        var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-
-        await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
-        return data;
+        return await GetCachedData<PriceDataDto>(
+            cacheKey,
+            () => _coingGeckoManager.GetPriceDataAsync(tokenName, days),
+            TimeSpan.FromMinutes(10));
     }
 
     public async Task<TokenDescriptionDto> GetTokenDescriptionAsync(string tokenName)
     {
         string cacheKey = $"tokenDescription_{tokenName}";
 
-        TokenDescriptionDto data;
-
-        string serializedData = await _distributedCache.GetStringAsync(cacheKey);
-
-        if (serializedData != null)
-        {
-            return JsonConvert.DeserializeObject<TokenDescriptionDto>(serializedData);
-        }
-
-        data = await _coingGeckoManager.GetTokenDescriptionAsync(tokenName);
-        serializedData = JsonConvert.SerializeObject(data);
-
-        var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-
-        await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
-        return data;
+        return await GetCachedData<TokenDescriptionDto>(
+            cacheKey,
+            () => _coingGeckoManager.GetTokenDescriptionAsync(tokenName),
+            TimeSpan.FromMinutes(10));
     }
 
     public async Task<GlobalDataDto> GetGlobalDataAsync()
     {
-        string cacheKey = $"global";
+        string cacheKey = "global";
 
-        GlobalDataDto data;
+        return await GetCachedData<GlobalDataDto>(
+            cacheKey,
+            () => _coingGeckoManager.GetGlobalDataAsync(),
+            TimeSpan.FromMinutes(10));
+    }
 
+    private async Task<T> GetCachedData<T>(string cacheKey, Func<Task<T>> fetchData, TimeSpan cacheDuration)
+    {
         string serializedData = await _distributedCache.GetStringAsync(cacheKey);
-
         if (serializedData != null)
         {
-            return JsonConvert.DeserializeObject<GlobalDataDto>(serializedData);
+            return JsonConvert.DeserializeObject<T>(serializedData);
         }
 
-        data = await _coingGeckoManager.GetGlobalDataAsync();
+        T data = await fetchData();
         serializedData = JsonConvert.SerializeObject(data);
 
         var options = new DistributedCacheEntryOptions()
-            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+            .SetAbsoluteExpiration(cacheDuration);
 
         await _distributedCache.SetStringAsync(cacheKey, serializedData, options);
         return data;
     }
-
 }
