@@ -8,6 +8,7 @@ public class CoinGeckoManager : ICoinGeckoManager
 {
     private readonly string _coinGeckoURL = "https://api.coingecko.com/api/v3";
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _rapidApiKey = "299fedfe6dmsh707c3f427fb4559p1dbe24jsnc2d8e4b07595";
 
     public CoinGeckoManager(IHttpClientFactory httpClientFactory)
     {
@@ -53,6 +54,8 @@ public class CoinGeckoManager : ICoinGeckoManager
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         httpClient.DefaultRequestHeaders.Add("User-Agent", "CryptoCharts/1.0");
+        httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _rapidApiKey);
+        httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", "coingecko.p.rapidapi.com");
 
         return httpClient;
     }

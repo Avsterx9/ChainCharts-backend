@@ -6,15 +6,15 @@ namespace Crypto.API.Queries.GetGlobalData;
 
 public sealed class GetGlobalDataQueryHandler : IRequestHandler<GetGlobalDataQuery, GlobalDataDto>
 {
-    private readonly ICryptoService _cryptoService;
+    private readonly ICoinGeckoService _coinGeckoService;
 
-    public GetGlobalDataQueryHandler(ICryptoService cryptoService)
+    public GetGlobalDataQueryHandler(ICoinGeckoService cryptoService)
     {
-        _cryptoService = cryptoService;
+        _coinGeckoService = cryptoService;
     }
 
     public async Task<GlobalDataDto> Handle(GetGlobalDataQuery request, CancellationToken cancellationToken)
     {
-        return await _cryptoService.GetGlobalDataAsync(cancellationToken);
+        return await _coinGeckoService.GetGlobalDataAsync(cancellationToken);
     }
 }

@@ -26,7 +26,7 @@ public class CacheService : ICacheService
         return await GetCachedData<IEnumerable<CryptoTokenDto>>(
             cacheKey,
             () => _coingGeckoManager.GetCoinGeckoTokensAsync(),
-            TimeSpan.FromMinutes(10));
+            TimeSpan.FromMinutes(60));
     }
 
     public async Task<PriceDataDto> GetPriceDataAsync(string tokenName, int days)
@@ -36,7 +36,7 @@ public class CacheService : ICacheService
         return await GetCachedData<PriceDataDto>(
             cacheKey,
             () => _coingGeckoManager.GetPriceDataAsync(tokenName, days),
-            TimeSpan.FromMinutes(10));
+            TimeSpan.FromMinutes(60));
     }
 
     public async Task<TokenDescriptionDto> GetTokenDescriptionAsync(string tokenName)
@@ -46,7 +46,7 @@ public class CacheService : ICacheService
         return await GetCachedData<TokenDescriptionDto>(
             cacheKey,
             () => _coingGeckoManager.GetTokenDescriptionAsync(tokenName),
-            TimeSpan.FromMinutes(10));
+            TimeSpan.FromMinutes(60));
     }
 
     public async Task<GlobalDataDto> GetGlobalDataAsync()
@@ -56,7 +56,7 @@ public class CacheService : ICacheService
         return await GetCachedData<GlobalDataDto>(
             cacheKey,
             () => _coingGeckoManager.GetGlobalDataAsync(),
-            TimeSpan.FromMinutes(10));
+            TimeSpan.FromMinutes(60));
     }
 
     private async Task<T> GetCachedData<T>(string cacheKey, Func<Task<T>> fetchData, TimeSpan cacheDuration)

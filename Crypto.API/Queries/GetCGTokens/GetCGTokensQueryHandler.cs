@@ -6,15 +6,15 @@ namespace Crypto.API.Queries.GetCGTokens;
 
 public sealed class GetCGTokensQueryHandler : IRequestHandler<GetCGTokensQuery, IEnumerable<CryptoTokenDto>>
 {
-    private readonly ICryptoService _cryptoService;
+    private readonly ICoinGeckoService _coinGeckoService;
 
-    public GetCGTokensQueryHandler(ICryptoService cryptoService)
+    public GetCGTokensQueryHandler(ICoinGeckoService cryptoService)
     {
-        _cryptoService = cryptoService;
+        _coinGeckoService = cryptoService;
     }
 
     public async Task<IEnumerable<CryptoTokenDto>> Handle(GetCGTokensQuery request, CancellationToken cancellationToken)
     {
-        return await _cryptoService.GetCGTokensAsync(request);
+        return await _coinGeckoService.GetCGTokensAsync(request);
     }
 }

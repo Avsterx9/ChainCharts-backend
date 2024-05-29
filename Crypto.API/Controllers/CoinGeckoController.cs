@@ -24,7 +24,6 @@ public class CoinGeckoController : ControllerBase
     public async Task<IActionResult> GetTokens(CancellationToken ct) =>
         Ok(await _sender.Send(new GetCGTokensQuery(), ct));
 
-
     [HttpGet("GetPriceData")]
     public async Task<IActionResult> GetPriceData([FromQuery] string TokenName,[FromQuery] int Days, CancellationToken ct) =>
         Ok(await _sender.Send(new GetPriceDataQuery(TokenName, Days), ct));

@@ -2,8 +2,10 @@ using Common.Authorization;
 using Common.Middleware;
 using Common.PolicyExtensions;
 using Common.Services;
+using Crypto.API.Models.Database;
 using Crypto.API.Repositories;
 using Crypto.API.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
@@ -15,11 +17,6 @@ var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 int port = 5002;
 
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    serverOptions.ListenLocalhost(port);
-//});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(MyAllowSpecificOrigins,
@@ -29,8 +26,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<CryptoContext>(options => options.UseSqlServer(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<CryptoContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
 
@@ -41,10 +38,12 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 
-builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<ICoinGeckoService, CoinGeckoService>();
 builder.Services.AddScoped<ICoinGeckoManager, CoinGeckoManager>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
-builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddScoped<ICryptoRepository, CryptoRepository>();
 builder.Services.AddHttpClient();
 
 builder.Services.AddEndpointsApiExplorer();

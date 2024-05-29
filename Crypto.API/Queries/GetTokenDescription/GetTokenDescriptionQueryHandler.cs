@@ -6,15 +6,15 @@ namespace Crypto.API.Queries.GetTokenDescription;
 
 public sealed class GetTokenDescriptionQueryHandler : IRequestHandler<GetTokenDescriptionQuery, TokenDescriptionDto>
 {
-    private readonly ICryptoService _cryptoService;
+    private readonly ICoinGeckoService _coinGeckoService;
 
-    public GetTokenDescriptionQueryHandler(ICryptoService cryptoService)
+    public GetTokenDescriptionQueryHandler(ICoinGeckoService cryptoService)
     {
-        _cryptoService = cryptoService;
+        _coinGeckoService = cryptoService;
     }
 
     public Task<TokenDescriptionDto> Handle(GetTokenDescriptionQuery request, CancellationToken cancellationToken)
     {
-        return _cryptoService.GetTokenDescriptionAsync(request.tokenName, cancellationToken);
+        return _coinGeckoService.GetTokenDescriptionAsync(request.tokenName, cancellationToken);
     }
 }
