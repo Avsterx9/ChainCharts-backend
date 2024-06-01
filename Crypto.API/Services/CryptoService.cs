@@ -75,12 +75,73 @@ public class CryptoService : ICryptoService
 
     public async Task<bool> DeleteFavouriteTokenAsync(string TokenId, CancellationToken ct)
     {
-        var token = await _cryptoRepository.GetTokenById(TokenId, ct);
+        var token = await _cryptoRepository.GetFavouriteTokenById(TokenId, ct);
 
         if (token is null)
             throw new NotFoundException(ExceptionCodes.TOKEN_NOT_FOUND);
 
         await _cryptoRepository.DeleteFavouriteToken(token, ct);
+        return true;
+    }
+
+    public async Task<bool> AddUserTokenAsync(UserTokenLiteDto model, CancellationToken ct)
+    {
+        var userId = _userContextService.GetUserId();
+
+        var tokens = await _cryptoRepository.GetUserTokensAsync(userId, ct);
+
+        if (tokens.Any(x => x.TokenId == model.TokenId))
+            return true;
+
+        var userToken = new UserToken
+        {
+            UserId = userId,
+            TokenId = model.TokenId,
+            CreatedDate = DateTime.Now,
+            Quantity = model.Quantity
+        };
+
+        await _cryptoRepository.AddUserTokenAsync(userToken, ct);
+        return true;
+    }
+
+    public async Task<IEnumerable<UserTokenDto>> GetUserTokensAsync(CancellationToken ct)
+    {
+        var userId = _userContextService.GetUserId();
+
+        var userTokens = await _cryptoRepository.GetUserTokensAsync(userId, ct);
+        var tokens = await _cacheService.GetCGTokensAsync();
+
+        var response = new List<UserTokenDto>();
+        foreach (var userToken in userTokens)
+        {
+            var currentToken = tokens.FirstOrDefault(x => x.Id == userToken.TokenId);
+
+            if (currentToken is null) continue;
+
+            response.Add(new UserTokenDto
+            {
+                Image = currentToken.Image,
+                TokenId = userToken.TokenId,
+                Name = currentToken.Name,
+                Price = currentToken.CurrentPrice,
+                Symbol = currentToken.Symbol,
+                Quantity = userToken.Quantity,
+                ValueEstimation = currentToken.CurrentPrice * userToken.Quantity
+            });
+        }
+
+        return response;
+    }
+
+    public async Task<bool> DeleteUserTokenAsync(string TokenId, CancellationToken ct)
+    {
+        var token = await _cryptoRepository.GetUserTokenById(TokenId, ct);
+
+        if (token is null)
+            throw new NotFoundException(ExceptionCodes.TOKEN_NOT_FOUND);
+
+        await _cryptoRepository.DeleteUserToken(token, ct);
         return true;
     }
 }

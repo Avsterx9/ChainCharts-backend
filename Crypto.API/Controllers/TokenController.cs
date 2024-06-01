@@ -1,7 +1,11 @@
 ﻿using Crypto.API.Commands.AddFavouriteToken;
+using Crypto.API.Commands.AddUserToken;
 using Crypto.API.Commands.DeleteFavouriteToken;
+using Crypto.API.Commands.DeleteUserToken;
+using Crypto.API.Models.Dto;
 using Crypto.API.Queries.GetCGTokens;
 using Crypto.API.Queries.GetFavouriteTokens;
+using Crypto.API.Queries.GetUserTokens;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +23,7 @@ public class TokenController : ControllerBase
         _sender = sender;
     }
 
-    [HttpPost("AddFavourite")]
+    [HttpPost("AddFavouriteToken")]
     public async Task<IActionResult> AddFavouriteToken([FromQuery] string TokenId, CancellationToken ct) =>
         Ok(await _sender.Send(new AddFavouriteTokenCommand(TokenId), ct));
 
@@ -30,4 +34,16 @@ public class TokenController : ControllerBase
     [HttpDelete("DeleteFavouriteToken")]
     public async Task<IActionResult> DeleteFavouriteToken([FromQuery] string TokenId, CancellationToken ct) =>
         Ok(await _sender.Send(new DeleteFavouriteTokenCommand(TokenId), ct));
+
+    [HttpPost("AddUserToken")]
+    public async Task<IActionResult> AddUserToken([FromBody] UserTokenLiteDto model, CancellationToken ct) =>
+        Ok(await _sender.Send(new AddUserTokenCommand(model), ct));
+
+    [HttpGet("GetUserTokens")]
+    public async Task<IActionResult> GetUserTokens(CancellationToken ct) =>
+        Ok(await _sender.Send(new GetUserTokensQuery(), ct));
+
+    [HttpDelete("DeleteUserToken")]
+    public async Task<IActionResult> DeleteUserToken([FromQuery] string TokenId, CancellationToken ct) =>
+        Ok(await _sender.Send(new DeleteUserTokenCommand(TokenId), ct));
 }

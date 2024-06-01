@@ -33,8 +33,33 @@ public class CryptoRepository : ICryptoRepository
         await _context.SaveChangesAsync(ct);
     }
 
-    public async Task<FavouriteToken?> GetTokenById(string TokenId, CancellationToken ct)
+    public async Task<FavouriteToken?> GetFavouriteTokenById(string TokenId, CancellationToken ct)
     {
         return await _context.FavouriteTokens.FirstOrDefaultAsync(x => x.TokenId == TokenId, ct);
+    }
+
+    public async Task<UserToken> AddUserTokenAsync(UserToken token, CancellationToken ct)
+    {
+        await _context.UserTokens.AddAsync(token);
+        await _context.SaveChangesAsync(ct);
+        return token;
+    }
+
+    public async Task<List<UserToken>> GetUserTokensAsync(Guid userId, CancellationToken ct)
+    {
+        return await _context.UserTokens
+            .Where(x => x.UserId == userId)
+            .ToListAsync(ct);
+    }
+
+    public async Task DeleteUserToken(UserToken token, CancellationToken ct)
+    {
+        _context.UserTokens.Remove(token);
+        await _context.SaveChangesAsync(ct);
+    }
+
+    public async Task<UserToken?> GetUserTokenById(string TokenId, CancellationToken ct)
+    {
+        return await _context.UserTokens.FirstOrDefaultAsync(x => x.TokenId == TokenId, ct);
     }
 }
