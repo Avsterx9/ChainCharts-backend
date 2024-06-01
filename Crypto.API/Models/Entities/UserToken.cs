@@ -6,5 +6,5 @@ public class UserToken
     public string TokenId { get; set; }
     public Guid UserId { get; set; }
     public DateTime CreatedDate { get; set; }
-    public int Quantity { get; set; }
+    public decimal Quantity { get; set; }
 }

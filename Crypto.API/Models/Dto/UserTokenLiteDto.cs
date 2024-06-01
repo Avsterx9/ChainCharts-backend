@@ -3,5 +3,5 @@
 public record UserTokenLiteDto
 {
     public string TokenId { get; set; }
-    public int Quantity { get; set; }
+    public decimal Quantity { get; set; }
 }
