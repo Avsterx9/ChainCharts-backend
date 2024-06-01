@@ -73,7 +73,7 @@ public class CryptoService : ICryptoService
         return response;
     }
 
-    public async Task<bool> DeleteFavouriteToken(string TokenId, CancellationToken ct)
+    public async Task<bool> DeleteFavouriteTokenAsync(string TokenId, CancellationToken ct)
     {
         var token = await _cryptoRepository.GetTokenById(TokenId, ct);
 
