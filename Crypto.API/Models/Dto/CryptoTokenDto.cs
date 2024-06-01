@@ -81,4 +81,6 @@ public class CryptoTokenDto
 
     [JsonProperty("last_updated")]
     public DateTime LastUpdated { get; set; }
+
+    public bool IsFavourite { get; set; }
 }

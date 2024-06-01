@@ -18,7 +18,7 @@ public class TokenController : ControllerBase
         _sender = sender;
     }
 
-    [HttpGet("AddFavourite")]
+    [HttpPost("AddFavourite")]
     public async Task<IActionResult> AddFavouriteToken([FromQuery] string TokenId, CancellationToken ct) =>
         Ok(await _sender.Send(new AddFavouriteTokenCommand(TokenId), ct));
 

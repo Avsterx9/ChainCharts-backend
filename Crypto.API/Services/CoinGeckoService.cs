@@ -1,20 +1,41 @@
-﻿using Crypto.API.Models.Dto;
+﻿using Common.Services;
+using Crypto.API.Models.Dto;
 using Crypto.API.Queries.GetCGTokens;
+using Crypto.API.Repositories;
 
 namespace Crypto.API.Services;
 
 public class CoinGeckoService : ICoinGeckoService
 {
     private readonly ICacheService _cacheService;
+    private readonly ICryptoRepository _repository;
+    private readonly IUserContextService _userContextService;
 
-    public CoinGeckoService(ICacheService cacheService)
+    public CoinGeckoService(
+        ICacheService cacheService,
+        ICryptoRepository cryptoRepository,
+        IUserContextService userContextService)
     {
         _cacheService = cacheService;
+        _repository = cryptoRepository;
+        _userContextService = userContextService;
     }
 
     public async Task<IEnumerable<CryptoTokenDto>> GetCGTokensAsync(GetCGTokensQuery query)
     {
+        var userId = _userContextService.GetUserId();
+
         var tokens = await _cacheService.GetCGTokensAsync();
+        var favourites = await _repository.GetFavouriteTokensAsync(userId, new CancellationToken());
+
+        foreach(var fav in favourites)
+        {
+            var token = tokens.FirstOrDefault(x => x.Id == fav.TokenId);
+
+            if (token is null) continue;
+
+            token.IsFavourite = true;
+        }
 
         return tokens;
     }

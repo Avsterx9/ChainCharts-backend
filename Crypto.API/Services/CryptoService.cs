@@ -63,7 +63,10 @@ public class CryptoService : ICryptoService
             response.Add(new FavouriteTokenDto
             {
                 Image = currentToken.Image,
-                TokenId = favouriteToken.TokenId
+                TokenId = favouriteToken.TokenId,
+                Name = currentToken.Name,
+                Price = currentToken.CurrentPrice,
+                Symbol = currentToken.Symbol,
             });
         }
 
