@@ -15,7 +15,7 @@ public sealed class DeleteUserTokenCommandHandler : IRequestHandler<DeleteUserTo
 
     public async Task<StandardResponse> Handle(DeleteUserTokenCommand request, CancellationToken cancellationToken)
     {
-        var result = await _cryptoService.AddFavouriteTokenAsync(request.TokenId, cancellationToken);
+        var result = await _cryptoService.DeleteUserTokenAsync(request.TokenId, cancellationToken);
 
         if (result is false)
             return new StandardResponse(false, "Could not remove token");
