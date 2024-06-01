@@ -10,4 +10,5 @@ public interface ICryptoService
     Task<bool> AddUserTokenAsync(UserTokenLiteDto model, CancellationToken ct);
     Task<IEnumerable<UserTokenDto>> GetUserTokensAsync(CancellationToken ct);
     Task<bool> DeleteUserTokenAsync(string TokenId, CancellationToken ct);
+    Task<WalletEstimationDto> GetUserWalletEstimationAsync(CancellationToken cancellationToken);
 }

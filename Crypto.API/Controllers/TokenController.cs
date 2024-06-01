@@ -6,6 +6,7 @@ using Crypto.API.Models.Dto;
 using Crypto.API.Queries.GetCGTokens;
 using Crypto.API.Queries.GetFavouriteTokens;
 using Crypto.API.Queries.GetUserTokens;
+using Crypto.API.Queries.GetWalletEstimation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,4 +47,8 @@ public class TokenController : ControllerBase
     [HttpDelete("DeleteUserToken")]
     public async Task<IActionResult> DeleteUserToken([FromQuery] string TokenId, CancellationToken ct) =>
         Ok(await _sender.Send(new DeleteUserTokenCommand(TokenId), ct));
+
+    [HttpGet("Wallet")]
+    public async Task<IActionResult> GetWalletEstimation(CancellationToken ct) =>
+        Ok(await _sender.Send(new GetWalletEstimationQuery(), ct));
 }
