@@ -152,7 +152,11 @@ public class CryptoService : ICryptoService
         var userTokens = await _cryptoRepository.GetUserTokensAsync(userId, cancellationToken);
         var tokens = await _cacheService.GetCGTokensAsync();
 
+        if (!userTokens.Any())
+            return new WalletEstimationDto { TotalEstimation = 0 };
+
         var response = new WalletEstimationDto();
+        response.TokenValues = new List<TokenValueDto>();
         foreach (var userToken in userTokens)
         {
             var currentToken = tokens.FirstOrDefault(x => x.Id == userToken.TokenId);
